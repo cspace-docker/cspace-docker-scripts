@@ -7,6 +7,7 @@
 # Find the docker executable and get its path
 # TODO: Consider using 'type -P' rather than 'command -v' here; see
 # http://www.cyberciti.biz/faq/unix-linux-shell-find-out-posixcommand-exists-or-not/
+
 DOCKER_CMD=`command -v docker`
 if [ -z "$DOCKER_CMD" ]
   then
@@ -26,6 +27,11 @@ fi
 # Each Docker image is given a pre-defined name (via the '--tag' option)
 # so that each successive image can be built on top of the previous one,
 # via a 'FROM imagename' directive in each Dockerfile.
-sudo $DOCKER_CMD build --tag=rem/cspace-base ./cspace-base               
-sudo $DOCKER_CMD build --tag=rem/cspace-version ./cspace-provision-version  
-sudo $DOCKER_CMD build --tag=rem/cspace-instance ./cspace-provision-instance 
+#
+# The '--rm=true' option removes intermediate images created during
+# the run, if the build succeeds, leaving only the final image, to help
+# prevent "image clutter."
+
+sudo $DOCKER_CMD build --rm=true --tag=rem/cspace-base ./cspace-base               
+sudo $DOCKER_CMD build --rm=true --tag=rem/cspace-version ./cspace-provision-version  
+sudo $DOCKER_CMD build --rm=true --tag=rem/cspace-instance ./cspace-provision-instance
