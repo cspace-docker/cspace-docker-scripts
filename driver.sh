@@ -34,4 +34,19 @@ fi
 
 sudo $DOCKER_CMD build --rm=true --tag=rem/cspace-base ./cspace-base               
 sudo $DOCKER_CMD build --rm=true --tag=rem/cspace-version ./cspace-provision-version  
-sudo $DOCKER_CMD build --rm=true --tag=rem/cspace-instance ./cspace-provision-instance
+
+# Copy the template which holds default values
+# to create a per-instance configuration file
+cp ./cspace-provision-instance/cspace-instance.copyme ./cspace-provision-instance/cspace-instance.properties
+
+# Edit values in that configuration file, either manually
+# or via automation
+
+# Build the last Docker image, in part, by referencing per-instance
+# values stored in that configuration file
+
+sudo $DOCKER_CMD build \
+  --rm=true \
+  --tag=rem/cspace-instance \
+  --env-file=./cspace-instance.properties \
+  ./cspace-provision-instance
