@@ -42,8 +42,8 @@ cp ./cspace-provision-instance/cspace-instance.copyme ./cspace-provision-instanc
 # (Edit values in that configuration file, either manually
 # or via automation)
 
-# Build the last Docker image ("cspace-instance"), in part, by
-# referencing per-instance values stored in that configuration file
+# Build the last Docker image ("cspace-provision-instance"), in part,
+# by referencing per-instance values stored in that configuration file
 
 sudo $DOCKER_CMD build \
   --rm=true \
