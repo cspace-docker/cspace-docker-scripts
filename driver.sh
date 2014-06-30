@@ -15,12 +15,12 @@ if [ -z "$DOCKER_CMD" ]
     # See http://blog.docker.com/2014/04/docker-in-ubuntu-ubuntu-in-docker/#comment-1146
     DOCKER_CMD=`command -v docker.io`
 fi
-echo "Found docker command at $DOCKER_CMD"
 if [ -z "$DOCKER_CMD" ]
   then 
     echo "Error: Could not find docker command; exiting ..."
     exit 1
 fi
+echo "Found docker command at $DOCKER_CMD"
 
 # Execute multiple Dockerfiles in sequence.
 #
@@ -39,11 +39,11 @@ sudo $DOCKER_CMD build --rm=true --tag=rem/cspace-version ./cspace-provision-ver
 # to create a per-instance configuration file
 cp ./cspace-provision-instance/cspace-instance.copyme ./cspace-provision-instance/cspace-instance.properties
 
-# Edit values in that configuration file, either manually
-# or via automation
+# (Edit values in that configuration file, either manually
+# or via automation)
 
-# Build the last Docker image, in part, by referencing per-instance
-# values stored in that configuration file
+# Build the last Docker image ("cspace-instance"), in part, by
+# referencing per-instance values stored in that configuration file
 
 sudo $DOCKER_CMD build \
   --rm=true \
