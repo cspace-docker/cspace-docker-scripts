@@ -63,29 +63,14 @@ echo "Found docker command at $DOCKER_CMD"
 sudo $DOCKER_CMD build --rm=true --tag=collectionspace/cspace-base ./cspace-base               
 sudo $DOCKER_CMD build --rm=true --tag=collectionspace/cspace-version ./cspace-provision-version  
 
-# Check for a script that sets a variety of environment variables needed
-# to build a CollectionSpace instance. 
-#
-# If that script file doesn't exist, use default values:
-# Copy the template which holds default values to create that script.
-# FIXME: Store multiply-reused paths and filenames in variables here.
-if [ ! -f ./cspace-provision-instance/cspace-instance.sh ]; then
-  cp ./cspace-provision-instance/cspace-instance.copyme ./cspace-provision-instance/cspace-instance.sh
-fi
+# Read values from a per-instance configuration file and substitute
+# those values for placeholder macros within a template Dockerfile, thus
+# generating a Dockerfile specific to a particular instance of CollectionSpace.
 
-# Run the environment variable setup script
-chmod u+x ./cspace-provision-instance/cspace-instance.sh
-source ./cspace-provision-instance/cspace-instance.sh
+sed -f cspace-provision-instance/cspace-instance-values.sed \
+  cspace-provision-instance/Dockerfile.template > cspace-provision-instance/Dockerfile
 
-# Display these values (for debugging)
-env
-
-# Build the last Docker image ("cspace-provision-instance"), in part,
-# by referencing per-instance values stored in that configuration file
-
-# FIXME: Uncomment the following and pass in selected environment variables.
-
-# sudo $DOCKER_CMD build \
-#   --rm=true \
-#   --tag=collectionspace/cspace-instance \
-#   ./cspace-provision-instance
+sudo $DOCKER_CMD build \
+  --rm=true \
+  --tag=collectionspace/cspace-instance \
+  ./cspace-provision-instance
