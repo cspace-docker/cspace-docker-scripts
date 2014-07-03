@@ -120,7 +120,7 @@ DOCKER_MIN_VERSION_REQUIRED=1.0
 docker_command_path
 docker_version
 check_version $DOCKER_VERSION $DOCKER_MIN_VERSION_REQUIRED
-if $version_equals_or_exceeds_checked_version ; then
+if [[ "$version_equals_or_exceeds_checked_version" == true ]] ; then
   echo "Docker version requirement has been met"
   docker_upgrade_required=false
 else
