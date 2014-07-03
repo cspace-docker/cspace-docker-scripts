@@ -168,8 +168,9 @@ if [[ "$docker_upgrade_required" == true ]]; then
     # Get the name of the Docker command once again, following the upgrade.
     #
     # (Under at least one circumstance - in Ubuntu 14.04, upgrading from
-    # built-in 0.9.1 Docker to a 1.0-or later Docker version, the command
-    # name will change from 'docker.io' to 'docker' after the upgrade.)
+    # built-in 0.9.1 Docker to an - as of this writing - 1.0.1 or later
+    # Docker version, the command name will change from 'docker.io' to
+    # 'docker' after the upgrade.)
     #
     docker_command_path
 
