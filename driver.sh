@@ -42,9 +42,9 @@ check_version()
       | sort -t. -k 1,1nr -k 2,2nr -k 3,3nr -k 4,4nr \
       | head -1)
     if [[ $version_supplied == $winner ]] ; then
-        version_equals_or_exceeds_check=true
+        VERSION_EQUALS_OR_EXCEEDS_CHECKED_VERSION=true
     else
-        version_equals_or_exceeds_check=false
+        VERSION_EQUALS_OR_EXCEEDS_CHECKED_VERSION=false
     fi
 }
 
@@ -116,11 +116,11 @@ docker_version()
 # Check that the installed Docker executable equals or exceeds
 # a minimum required version.
 
-DOCKER_MIN_VERSION_REQUIRED=1.0
+DOCKER_MINIMUM_VERSION_REQUIRED=1.0
 docker_command_path
 docker_version
-check_version $DOCKER_VERSION $DOCKER_MIN_VERSION_REQUIRED
-if [[ "$version_equals_or_exceeds_checked_version" == true ]] ; then
+check_version $DOCKER_VERSION $DOCKER_MINIMUM_VERSION_REQUIRED
+if [[ "$VERSION_EQUALS_OR_EXCEEDS_CHECKED_VERSION" == true ]] ; then
   echo "Docker version requirement has been met"
   docker_upgrade_required=false
 else
@@ -174,6 +174,16 @@ if [[ "$docker_upgrade_required" == true ]]; then
     #
     docker_command_path
 
+    #
+    # Display the new version number, following the upgrade.
+    #
+    # (There's an implicit assumption made here that upgrading to
+    # the latest version available in the Docker APT repo will
+    # always - by definition - meet our minimum requirements for the
+    # Docker version, so the minimum version check performed above
+    # isn't repeated here.)
+    #
+    docker_version
 fi
 
 # Uncomment when debugging setup code above
