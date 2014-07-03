@@ -51,7 +51,7 @@ check_version()
 # Returns the full path to the executable Docker command.
 docker_command_path()
 {
-    echo "Finding path to Docker executable file ..."
+    echo "Identifying path to Docker executable file ..."
     #
     # TODO: Consider using 'type -P' rather than 'command -v' here; see
     # http://www.cyberciti.biz/faq/unix-linux-shell-find-out-posixcommand-exists-or-not/
