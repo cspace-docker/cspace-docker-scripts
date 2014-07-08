@@ -109,6 +109,28 @@ docker_version()
 }
 
 # ###############################################################
+# Recognize a command line argument, '-n', as specifying that the
+# '--no-cache' option should be enabled when running Dockerfiles.
+# (This option ignores any cached copies of the relevant Docker
+# images, and instead will (re)build those images from scratch.)
+# ###############################################################
+
+NO_CACHE_OPTION=
+while getopts ":n" opt; do
+  case $opt in
+    # A '-n' option was entered on the command line.
+    n)
+      echo "Dockerfiles will be invoked with --no-cache option ..."
+      NO_CACHE_OPTION='--no-cache'
+      ;;
+    \?)
+      # if any other command line options are supplied,
+      # ignore them.
+      ;;
+  esac
+done
+
+# ###############################################################
 # Ensure that we have the latest version of Docker installed
 # See http://docs.docker.com/installation/ubuntulinux/
 # ###############################################################
@@ -206,9 +228,9 @@ fi
 # Build the first two images, in succession.
 #
 echo "Building CollectionSpace Base image ..."
-sudo $DOCKER_CMD build --rm=true --tag=collectionspace/cspace-base ./cspace-base               
+sudo $DOCKER_CMD build $NO_CACHE_OPTION --rm=true --tag=collectionspace/cspace-base ./cspace-base               
 echo "Building CollectionSpace Version-specific image ..."
-sudo $DOCKER_CMD build --rm=true --tag=collectionspace/cspace-version ./cspace-provision-version  
+sudo $DOCKER_CMD build $NO_CACHE_OPTION --rm=true --tag=collectionspace/cspace-version ./cspace-provision-version  
 
 #
 # Read values from a per-instance configuration file and substitute
@@ -225,4 +247,4 @@ sed -f ./cspace-provision-instance/cspace-instance-values.sed \
 # Build the third image.
 #
 echo "Building CollectionSpace Instance-specific image ..."
-sudo $DOCKER_CMD build --rm=true --tag=collectionspace/cspace-instance ./cspace-provision-instance
+sudo $DOCKER_CMD build $NO_CACHE_OPTION --rm=true --tag=collectionspace/cspace-instance ./cspace-provision-instance
