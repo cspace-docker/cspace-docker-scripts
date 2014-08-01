@@ -138,7 +138,7 @@ done
 # Check that the installed Docker executable equals or exceeds
 # a minimum required version.
 
-DOCKER_MINIMUM_VERSION_REQUIRED=1.0
+DOCKER_MINIMUM_VERSION_REQUIRED=1.1.2
 docker_command_path
 docker_version
 check_version $DOCKER_VERSION $DOCKER_MINIMUM_VERSION_REQUIRED
@@ -225,12 +225,14 @@ fi
 # This helps prevent "image clutter."
 
 #
-# Build the first two images, in succession.
+# Build the first three images, in succession.
 #
 echo "Building CollectionSpace Base image ..."
 sudo $DOCKER_CMD build $NO_CACHE_OPTION --rm=true --tag=collectionspace/cspace-base ./cspace-base               
 echo "Building CollectionSpace Version-specific image ..."
 sudo $DOCKER_CMD build $NO_CACHE_OPTION --rm=true --tag=collectionspace/cspace-version ./cspace-provision-version  
+echo "Building CollectionSpace Build image ..."
+sudo $DOCKER_CMD build $NO_CACHE_OPTION --rm=true --tag=collectionspace/cspace-build ./cspace-provision-build  
 
 #
 # Read values from a per-instance configuration file and substitute
@@ -244,7 +246,7 @@ sed -f ./cspace-provision-instance/cspace-instance-values.sed \
   ./cspace-provision-instance/Dockerfile.template > ./cspace-provision-instance/Dockerfile
 
 #
-# Build the third image.
+# Build the fourth image.
 #
 echo "Building CollectionSpace Instance-specific image ..."
 sudo $DOCKER_CMD build $NO_CACHE_OPTION --rm=true --tag=collectionspace/cspace-instance ./cspace-provision-instance
