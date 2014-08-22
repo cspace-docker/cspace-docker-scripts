@@ -102,7 +102,7 @@ docker_command_path()
     fi
     if [ -z "$docker_cmd" ]
       then 
-        echo "Could not find Docker command ..."
+        echo "Could not find Docker executable file in path ..."
       else
         #
         # Setting or updating a global variable, here, is the simplest (if not
