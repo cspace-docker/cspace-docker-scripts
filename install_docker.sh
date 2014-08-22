@@ -1,13 +1,22 @@
 #!/usr/bin/env bash
 
-# Install the latest version of Docker on a Debian-based Linux
-# system (including Ubuntu).
 #
-# Installation will be performed if:
+# install_docker.sh
 #
-# * Docker isn't present; or
-# * Docker is present but its version is lower than a minimum
-#   required version.
+# Installs or updates to the latest version of Docker on a
+# Debian-based Linux system, such as Debian or Ubuntu:
+#
+# * Installation will be performed if Docker isn't present.
+# * Updates will be performed if Docker is present, but its
+#   version is lower than a minimum required version.
+#
+# This script can thus be included in automated workflows where:
+#
+# * You want to stay at a supported version of Docker; and/or
+# * You want to verify with each run that Docker - and a required
+#   version of same - is present but minimize the frequency of
+#   time-consuming updates.
+#
 
 # ###############################################################
 # Variables to configure
@@ -15,11 +24,6 @@
 
 # Specify a minimum required version for Docker (in n.n or n.n.n format,
 # e.g. 1.0, 1.1.2, or - hypothetically - 12.6.5)
-#
-# If Docker is found on the target system, installation will
-# only be performed only if the minimum required version,
-# below, isn't already present. This allows you to retain
-# a stable version of Docker, and upgrade it only when needed.
 #
 # To always force the installation of the latest available version
 # of Docker, set the minimum version below to an arbitrarily high
@@ -183,9 +187,9 @@ if [ -z "$DOCKER_CMD" ]
     if [[ "$VERSION_EQUALS_OR_EXCEEDS_CHECKED_VERSION" == true ]]
       then
         echo "Docker version requirement has been met"
-        docker_upgrade_required=false
+        docker_update_required=false
       else
-        docker_upgrade_required=true
+        docker_update_required=true
     fi
 fi
 
@@ -194,9 +198,9 @@ fi
 # required version, add the repository configuration from
 # Docker.io, and then install the latest available Docker package.
 #
-if [[ "$docker_installation_required" == true || "$docker_upgrade_required" == true ]]; then
+if [[ "$docker_installation_required" == true || "$docker_update_required" == true ]]; then
 
-    echo "Installing or upgrading Docker ..."
+    echo "Installing or updating Docker ..."
     
     #
     # TODO: Include blocks for installing or upgrading
@@ -206,27 +210,21 @@ if [[ "$docker_installation_required" == true || "$docker_upgrade_required" == t
     #
     # Run Docker's own bootstrap script for installing Docker
     #
-    echo "Installation/upgrade includes package manager key & repo configuration ..."
-    curl -s https://get.docker.io/ubuntu/ | sudo sh
-    
-    #
-    # TODO: Consider switching to newer script that detects,
-    # and runs on both Debian- and Red Hat-based distros:
-    # https://get.docker.io
-    #
+    echo "Installation/update includes package manager key & repo configuration ..."
+    curl -s https://get.docker.io | sudo sh
 
     #
-    # Get the name of the Docker command once again, following the upgrade.
+    # Get the name of the Docker command once again, following the update.
     #
     # (Under at least one circumstance - in Ubuntu 14.04, upgrading from
     # built-in 0.9.1 Docker to an - as of this writing - 1.0.1 or later
     # Docker version, the command name will change from 'docker.io' to
-    # 'docker' after the upgrade.)
+    # 'docker' after the update.)
     #
     docker_command_path
 
     #
-    # Display the new version number, following the upgrade.
+    # Display the new version number, following the update.
     #
     # (There's an implicit assumption made here that upgrading to
     # the latest version available in the Docker APT repo will
