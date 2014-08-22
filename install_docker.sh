@@ -204,21 +204,16 @@ if [[ "$docker_installation_required" == true || "$docker_upgrade_required" == t
     #
     
     #
-    # If HTTPS transport hasn't yet been enabled for
-    # 'apt-get', enable that transport method.
-    #
-    [ -e /usr/lib/apt/methods/https ] || {
-      apt-get update
-      apt-get install apt-transport-https
-    }
-    
-    #
     # Run Docker's own bootstrap script for installing Docker
-    # (This script detects and runs on both Debian- and
-    # Red Hat-based distros.)
     #
     echo "Installation/upgrade includes package manager key & repo configuration ..."
     curl -s https://get.docker.io/ubuntu/ | sudo sh
+    
+    #
+    # TODO: Consider switching to newer script that detects,
+    # and runs on both Debian- and Red Hat-based distros:
+    # https://get.docker.io
+    #
 
     #
     # Get the name of the Docker command once again, following the upgrade.
